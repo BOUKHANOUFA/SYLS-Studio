@@ -426,3 +426,73 @@ a {
     grid-template-columns: 1fr;
   }
 }
+
+/* ===== FINITIONS PREMIUM DU MENU ===== */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(245, 240, 232, 0.97);
+  backdrop-filter: blur(12px);
+  transition: box-shadow 0.3s ease;
+}
+
+.header:hover {
+  box-shadow: 0 5px 25px rgba(23, 23, 23, 0.05);
+}
+
+.navigation a {
+  position: relative;
+}
+
+.navigation a::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--gold);
+  transition: width 0.3s ease;
+}
+
+.navigation a:hover::after {
+  width: 100%;
+}
+
+.header-button:hover {
+  border-color: var(--gold);
+  background: var(--gold);
+  color: var(--black);
+}
+
+.portfolio-card-link {
+  display: block;
+  height: 100%;
+}
+
+.portfolio-card-link .portfolio-visual {
+  transition: transform 0.5s ease;
+}
+
+.portfolio-card-link:hover .portfolio-visual {
+  transform: scale(1.025);
+}
+
+.portfolio-card {
+  transition: box-shadow 0.3s ease;
+}
+
+.portfolio-card:hover {
+  box-shadow: 0 15px 35px rgba(23, 23, 23, 0.10);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

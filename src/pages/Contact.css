@@ -1,0 +1,62 @@
+
+.contact-form {
+  display: grid;
+  max-width: 700px;
+  margin-top: 55px;
+  gap: 12px;
+}
+
+.contact-form label {
+  margin-top: 15px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.contact-form input,
+.contact-form select,
+.contact-form textarea {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #D8CFC2;
+  background: #FFFFFF;
+  color: #171717;
+  font: inherit;
+  border-radius: 0;
+}
+
+.contact-form input:focus,
+.contact-form select:focus,
+.contact-form textarea:focus {
+  outline: 2px solid #C6A878;
+  outline-offset: 2px;
+}
+
+.contact-form textarea {
+  resize: vertical;
+}
+
+.contact-form button {
+  justify-self: start;
+  margin-top: 20px;
+  cursor: pointer;
+  border: 0;
+}
+
+/* ===== FINITIONS PREMIUM CONTACT ===== */
+
+.contact-form input,
+.contact-form select,
+.contact-form textarea {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-form input:focus,
+.contact-form select:focus,
+.contact-form textarea:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(198, 168, 120, 0.12);
+}
+
+.contact-form button {
+  min-width: 180px;
+}

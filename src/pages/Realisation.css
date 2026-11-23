@@ -1,0 +1,67 @@
+
+.realisation-page {
+  min-height: 80vh;
+  padding: 90px 10%;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 70px;
+  font-size: 13px;
+  color: #68635D;
+  transition: color 0.3s ease;
+}
+
+.back-link:hover {
+  color: #C6A878;
+}
+
+.realisation-page h1 {
+  font-family: 'Manrope', sans-serif;
+  font-size: clamp(45px, 7vw, 75px);
+  font-weight: 500;
+  margin-bottom: 25px;
+}
+
+.realisation-description {
+  max-width: 650px;
+  color: #68635D;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.realisation-media {
+  min-height: 400px;
+  margin: 55px 0 35px;
+  background: linear-gradient(145deg, #392A19, #B58B4D, #171717);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+  gap: 15px;
+}
+
+.realisation-media p {
+  font-family: 'Manrope', sans-serif;
+  font-size: 25px;
+}
+
+.realisation-media span {
+  font-size: 13px;
+}
+
+@media (max-width: 600px) {
+  .realisation-page {
+    padding: 60px 7%;
+  }
+
+  .back-link {
+    margin-bottom: 45px;
+  }
+
+  .realisation-media {
+    min-height: 260px;
+  }
+}
