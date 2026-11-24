@@ -22,7 +22,12 @@ const transporter = nodemailer.createTransport({
 
 // Autoriser le site React à communiquer avec le backend
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5174'],
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'https://syls-studio.fr',
+    'https://www.syls-studio.fr',
+  ],
 }))
 
 // Lire les données JSON
