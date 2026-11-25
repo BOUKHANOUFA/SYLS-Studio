@@ -1,25 +1,14 @@
 
 const express = require('express')
 const cors = require('cors')
-const nodemailer = require('nodemailer')
 const rateLimit = require('express-rate-limit')
 
 require('dotenv').config()
 
 const app = express()
 app.set('trust proxy', 1)
-const PORT = process.env.PORT || 5000
 
-// Connexion à Gmail
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-})
+const PORT = process.env.PORT || 5000
 
 // Autoriser le site React à communiquer avec le backend
 app.use(cors({
@@ -33,7 +22,8 @@ app.use(cors({
 
 // Lire les données JSON
 app.use(express.json({ limit: '10kb' }))
-// Limiter les envois du formulaire pour éviter le spam
+
+// Limiter les envois pour éviter le spam
 const contactLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 5,
@@ -96,14 +86,39 @@ app.post('/api/contact', async (req, res) => {
     })
   }
 
+  // Vérifier la clé API Resend
+  if (!process.env.RESEND_API_KEY) {
+    console.error('La clé API Resend est absente.')
+
+    return res.status(500).json({
+      success: false,
+      message: 'Configuration du service e-mail indisponible.',
+    })
+  }
+
+  if (!process.env.EMAIL_USER) {
+    console.error('L’adresse de réception EMAIL_USER est absente.')
+
+    return res.status(500).json({
+      success: false,
+      message: 'Adresse de réception non configurée.',
+    })
+  }
+
   try {
-    // Envoyer le message vers ton adresse Gmail
-    await transporter.sendMail({
-      from: `"SYLS Studio" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_USER,
-      replyTo: email.trim(),
-      subject: `Nouveau message SYLS Studio : ${sujet.trim()}`,
-      text: `
+    // Envoyer le message avec Resend
+    const reponse = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: 'SYLS Studio <contact@syls-studio.fr>',
+        to: [process.env.EMAIL_USER],
+        reply_to: email.trim(),
+        subject: `Nouveau message SYLS Studio : ${sujet.trim()}`,
+        text: `
 Nouveau message reçu depuis le site SYLS Studio.
 
 Nom : ${nom.trim()}
@@ -112,17 +127,29 @@ Sujet : ${sujet.trim()}
 
 Message :
 ${message.trim()}
-      `,
+        `,
+      }),
     })
 
-    console.log('E-mail envoyé avec succès !')
+    const resultat = await reponse.json()
+
+    if (!reponse.ok) {
+      console.error('Erreur Resend :', resultat)
+
+      return res.status(500).json({
+        success: false,
+        message: 'Impossible d’envoyer votre message pour le moment.',
+      })
+    }
+
+    console.log('E-mail envoyé avec succès via Resend :', resultat.id)
 
     return res.status(200).json({
       success: true,
       message: 'Votre message a bien été envoyé. Merci !',
     })
   } catch (error) {
-    console.error('Erreur lors de l’envoi de l’e-mail :', error.message)
+    console.error('Erreur lors de l’envoi avec Resend :', error.message)
 
     return res.status(500).json({
       success: false,
